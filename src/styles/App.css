@@ -5,42 +5,6 @@
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
 .app-container {
   max-width: 800px;
   margin: 0 auto;
@@ -153,19 +117,60 @@ h1 {
   background-color: #45a049;
 }
 
-.tdd-container {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 2rem;
-  text-align: center;
+.puml-to-openapi-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
 }
 
-.tdd-container h1 {
-  color: #333;
+.input-section {
+  width: 100%;
+}
+
+.output-section {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.puml-to-openapi-container h2 {
+  color: #213547;
   margin-bottom: 1rem;
+  font-size: 1.8rem;
 }
 
-.tdd-container p {
-  color: #666;
-  font-size: 1.2rem;
+.puml-to-openapi-container h3 {
+  color: #213547;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
 }
+
+.description {
+  color: #666;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+  font-size: 1.1rem;
+}
+
+.openapi-output {
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+  padding: 1.5rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-family: 'Courier New', Courier, monospace;
+  white-space: pre-wrap;
+  margin-bottom: 1.5rem;
+  text-align: left;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  border: 1px solid #333;
+}
+
+.output-section {
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+  border: 1px solid #e9ecef;
+} 
