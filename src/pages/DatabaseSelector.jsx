@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PageLayout from '../components/layout/PageLayout';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -34,9 +34,14 @@ function DatabaseSelector() {
     }
   ];
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [selectedDb, setSelectedDb] = useState('');
+
   const handleDatabaseSelect = (database) => {
     if (!openApiSpec || !testCases || !selectedLanguage) {
-      alert('Missing required information. Please go back and complete all steps.');
+      setError('Missing required information. Please go back and complete all steps.');
       return;
     }
 
@@ -87,13 +92,13 @@ function DatabaseSelector() {
             align-items: center;
             gap: 10px;
           }
-          
+
           .database-btn:hover {
             background: #e5e5e5;
             border-color: #ccc;
             transform: translateY(-2px);
           }
-          
+
           .database-icon {
             width: 60px;
             height: 60px;
@@ -113,26 +118,68 @@ function DatabaseSelector() {
           .database-icon.neo4j-icon {
             color: #0084ff;
           }
+
+          .generate-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 15px 30px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1em;
+            text-align: center;
+            transition: background-color 0.3s ease;
+          }
+
+          .generate-btn:hover {
+            background: #45a049;
+          }
+
+          .generate-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+          }
+
+          .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-align: center;
+          }
         `}</style>
 
-        <p className="description">
-          Select your preferred database for integration with your API.
-        </p>
-        
-        <div className="database-buttons">
-          {databases.map((db) => (
-            <button 
-              key={db.name}
-              className="database-btn"
-              onClick={() => handleDatabaseSelect(db.name)}
-            >
-              <div className="database-icon">
-                {db.icon}
+        {!loading && (
+          <>
+            <p className="description">
+              Select your preferred database for integration with your API.
+            </p>
+            
+            <div className="database-buttons">
+              {databases.map((db) => (
+                <button 
+                  key={db.name}
+                  className="database-btn"
+                  onClick={() => handleDatabaseSelect(db.name)}
+                >
+                  <div className={`database-icon ${db.name.toLowerCase()}-icon`}>
+                    {db.icon}
+                  </div>
+                  {db.name}
+                </button>
+              ))}
+            </div>
+
+            {successMessage && (
+              <div className="success-message">
+                {successMessage}
               </div>
-              {db.name}
-            </button>
-          ))}
-        </div>
+            )}
+          </>
+        )}
       </div>
     </PageLayout>
   );

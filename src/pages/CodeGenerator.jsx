@@ -7,6 +7,16 @@ function CodeGenerator() {
   const [loading, setLoading] = useState(false);
   const [generatedCode, setGeneratedCode] = useState('');
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+
+  useEffect(() => {
+    if (successMessage) {
+      const timer = setTimeout(() => {
+        setSuccessMessage('');
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [successMessage]);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -14,11 +24,12 @@ function CodeGenerator() {
 
   useEffect(() => {
     if (openApiSpec && testCases && selectedLanguage && selectedDatabase) {
-      generateCode();
+      // Show the button immediately
+      setLoading(false);
     }
   }, [openApiSpec, testCases, selectedLanguage, selectedDatabase]);
 
-  const generateCode = async () => {
+  const handleGenerateAndDownload = async () => {
     if (!openApiSpec || !testCases || !selectedLanguage || !selectedDatabase) {
       setError('Missing required information. Please go back and complete all steps.');
       return;
@@ -114,7 +125,24 @@ Please generate the complete code with all necessary imports, dependencies, and 
           }
         });
 
-        setGeneratedCode(formattedCode);
+        // Create a blob and download the file
+        const blob = new Blob([cleanedCode], { type: 'text/plain' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `api_code_${selectedLanguage}_${selectedDatabase.toLowerCase()}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+
+        // Show success message
+        setSuccessMessage('Code generated and downloaded successfully!');
+        
+        // Add a small delay before showing the generated code
+        setTimeout(() => {
+          setGeneratedCode(cleanedCode);
+        }, 1000);
       } else {
         throw new Error('Invalid response format from code generator');
       }
@@ -131,52 +159,131 @@ Please generate the complete code with all necessary imports, dependencies, and 
 
   return (
     <PageLayout title="Code Generator">
-      <div className="code-generator-container">
-        {error && <div className="error-message">{error}</div>}
-        
-        <p className="description">
-          Generating code for your API using {selectedDatabase} database...
-        </p>
+      <style jsx>{`
+        .loading-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(255, 255, 255, 0.8);
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          gap: 20px;
+          z-index: 1000;
+        }
+
+        .loading-spinner {
+          width: 50px;
+          height: 50px;
+          border: 5px solid #f3f3f3;
+          border-top: 5px solid #3498db;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+
+        .loading-message {
+          font-size: 1.2em;
+          color: #333;
+        }
+
+        {{ ... existing styles ... }}
+        .generate-btn {
+          display: block;
+          margin: 20px auto;
+          padding: 15px 30px;
+          background: #4CAF50;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          font-size: 1.1em;
+          text-align: center;
+          transition: background-color 0.3s ease;
+        }
+
+        .generate-btn:hover {
+          background: #45a049;
+        }
+
+        .generate-btn:disabled {
+          background: #cccccc;
+          cursor: not-allowed;
+        }
+
+        .success-message {
+          background-color: #d4edda;
+          color: #155724;
+          padding: 15px;
+          border-radius: 4px;
+          margin-bottom: 20px;
+          text-align: center;
+          animation: fadeInOut 3s ease-in-out;
+        }
+
+        @keyframes fadeInOut {
+          0% { opacity: 0; transform: translateY(-10px); }
+          20% { opacity: 1; transform: translateY(0); }
+          80% { opacity: 1; transform: translateY(0); }
+          100% { opacity: 0; transform: translateY(-10px); }
+        }
+
+        .error-message {
+          background-color: #ffebee;
+          color: #c62828;
+          padding: 15px;
+          border-radius: 4px;
+          margin-bottom: 20px;
+          text-align: center;
+        }
+
+        .code-container {
+          max-width: 800px;
+          margin: 0 auto;
+          padding: 20px;
+        }
+
+        .code-display {
+          background: #f5f5f5;
+          padding: 20px;
+          border-radius: 8px;
+          overflow-x: auto;
+          font-family: 'Courier New', monospace;
+          white-space: pre-wrap;
+        }
+      `}</style>
+
+      {error && <div className="error-message">{error}</div>}
+      {successMessage && <div className="success-message">{successMessage}</div>}
+
+      <div className="code-container">
+        <button
+          className="generate-btn"
+          onClick={handleGenerateAndDownload}
+          disabled={loading}
+        >
+          {loading ? 'Generating...' : 'Generate and Download Code'}
+        </button>
 
         {loading && (
-          <div className="loading-message">
-            Generating code...
+          <div className="loading-overlay">
+            <div className="loading-spinner"></div>
+            <div className="loading-message">Generating and downloading code...</div>
           </div>
         )}
 
         {generatedCode && (
-          <div className="code-output-section">
-            <h3>Generated Code</h3>
-            <div className="code-content">
-              <pre className="code-block">{generatedCode}</pre>
-            </div>
+          <div className="code-display">
+            {generatedCode}
           </div>
         )}
-
-        <div className="action-buttons">
-          <button onClick={handleBack} disabled={loading}>
-            Back
-          </button>
-          {generatedCode && (
-            <button 
-              onClick={() => {
-                // Add download functionality
-                const blob = new Blob([generatedCode], { type: 'text/plain' });
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `api_${selectedDatabase.toLowerCase()}_code.${selectedLanguage}`;
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
-                document.body.removeChild(a);
-              }}
-              disabled={loading}
-            >
-              Download Code
-            </button>
-          )}
-        </div>
       </div>
     </PageLayout>
   );
