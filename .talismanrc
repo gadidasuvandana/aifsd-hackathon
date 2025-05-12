@@ -2,5 +2,5 @@ fileignoreconfig:
 - filename: package-lock.json
   checksum: 6859bab05bf79a4bcf4a93c6f7babe65980c853d6c672b2e348cf1ce6636a86d
 - filename: src/pages/DatabaseSelector.jsx
-  checksum: cfb7dfd4964d5d78de76fa4a4fdc1fe62c99fe492b26b552703c0d79218cf9b3
+  checksum: 5176505e2d7b4b1f468f447b8ab697bb62cd950cc0e17a0385392eda2b54adf3
 version: ""
