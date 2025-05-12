@@ -8,6 +8,20 @@ const PumlToOpenApi = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPumlText(e.target.result);
+      };
+      reader.onerror = () => {
+        setError('Error reading file');
+      };
+      reader.readAsText(file);
+    }
+  };
+
   const generateOpenApiSpec = async () => {
     if (!pumlText.trim()) return;
 
@@ -119,6 +133,7 @@ ${pumlText}`;
       <style jsx>{`
         .tdd-container {
           display: flex;
+          flex-direction: column;
           gap: 1rem;
           padding: 1rem;
           width: 100%;
@@ -126,13 +141,45 @@ ${pumlText}`;
           margin: 0 auto;
         }
 
-        .tdd-input-section, .tdd-output-section {
-          flex: 1;
-          width: 100%;
-          max-width: 550px;
+        .upload-section {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          padding: 1rem;
+          background: #f5f5f5;
+          border-radius: 8px;
+          margin-bottom: 1rem;
         }
 
-        .tdd-input-field, .tdd-output-field {
+        .file-input {
+          display: none;
+        }
+
+        .upload-btn {
+          background-color: #4CAF50;
+          color: white;
+          border: none;
+          padding: 8px 16px;
+          border-radius: 4px;
+          cursor: pointer;
+          font-size: 14px;
+          transition: background-color 0.3s;
+        }
+
+        .upload-btn:hover {
+          background-color: #45a049;
+        }
+
+        .file-name {
+          font-size: 14px;
+          color: #666;
+        }
+
+        .tdd-output-section {
+          width: 100%;
+        }
+
+        .tdd-output-field {
           width: 100%;
           min-height: 600px;
           padding: 1.5rem;
@@ -163,32 +210,6 @@ ${pumlText}`;
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
-        }
-
-        .button-group {
-          display: flex;
-          gap: 1rem;
-          margin-top: 1rem;
-        }
-
-        .generate-btn {
-          background-color: #4CAF50;
-          color: white;
-          border: none;
-          padding: 12px 24px;
-          border-radius: 4px;
-          cursor: pointer;
-          font-size: 16px;
-          transition: background-color 0.3s;
-        }
-
-        .generate-btn:hover {
-          background-color: #45a049;
-        }
-
-        .generate-btn:disabled {
-          background-color: #cccccc;
-          cursor: not-allowed;
         }
 
         .error-message {
@@ -223,36 +244,26 @@ ${pumlText}`;
 
         h2 {
           margin-bottom: 1rem;
-          color: #ffffff;
-        }
-
-        @media (max-width: 768px) {
-          .tdd-container {
-            flex-direction: column;
-          }
+          color: #333;
         }
       `}</style>
 
-      <div className="tdd-input-section">
-        <h2>PlantUML Diagram</h2>
-        <textarea
-          value={pumlText}
-          onChange={(e) => setPumlText(e.target.value)}
-          placeholder="Paste your PlantUML sequence diagram here... For example:
-@startuml
-actor User
-participant System
-User -> System: Login
-System -> System: Validate credentials
-System --> User: Success/Error
-@enduml"
-          className="tdd-input-field"
+      <div className="upload-section">
+        <input
+          type="file"
+          id="puml-file"
+          accept=".puml,.txt"
+          onChange={handleFileUpload}
+          className="file-input"
         />
-        <div className="button-group">
+        <label htmlFor="puml-file" className="upload-btn">
+          Upload PUML File
+        </label>
+        {pumlText && (
           <button 
             onClick={generateOpenApiSpec} 
-            disabled={loading || !pumlText.trim()}
-            className="generate-btn"
+            disabled={loading}
+            className="upload-btn"
           >
             {loading ? (
               <>
@@ -261,8 +272,9 @@ System --> User: Success/Error
               </>
             ) : 'Generate OpenAPI Spec'}
           </button>
-        </div>
+        )}
       </div>
+
       <div className="tdd-output-section">
         <h2>Generated OpenAPI Specification</h2>
         <pre className="tdd-output-field">
@@ -272,14 +284,8 @@ System --> User: Success/Error
         {openApiSpec && (
           <div className="output-buttons">
             <button onClick={downloadOpenApiSpec} className="download-btn">
-              <>
-              {loading ? (
-                <div className="loading-spinner"></div>
-              ) : (
-                <span className="button-icon">💾</span>
-              )}
+              <span className="button-icon">💾</span>
               Download OpenAPI Spec
-            </>
             </button>
             <button onClick={() => navigate('/test-generator', { state: { openApiSpec } })} className="next-btn">
               <span className="button-icon">➡️</span>
