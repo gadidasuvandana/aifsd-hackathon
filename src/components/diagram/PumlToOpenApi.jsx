@@ -143,11 +143,7 @@ ${pumlText}`;
 
         .upload-section {
           display: flex;
-          align-items: center;
           gap: 1rem;
-          padding: 1rem;
-          background: #f5f5f5;
-          border-radius: 8px;
           margin-bottom: 1rem;
         }
 
@@ -155,7 +151,7 @@ ${pumlText}`;
           display: none;
         }
 
-        .upload-btn {
+        .upload-btn, .back-btn {
           background-color: #4CAF50;
           color: white;
           border: none;
@@ -166,7 +162,7 @@ ${pumlText}`;
           transition: background-color 0.3s;
         }
 
-        .upload-btn:hover {
+        .upload-btn:hover, .back-btn:hover {
           background-color: #45a049;
         }
 
@@ -249,15 +245,24 @@ ${pumlText}`;
       `}</style>
 
       <div className="upload-section">
+        <button 
+          className="back-btn"
+          onClick={() => navigate('/', { state: { text: pumlText } })}
+        >
+          <span className="button-icon">🔙</span>
+          Back to Diagram Generator
+        </button>
+
         <input
           type="file"
-          id="puml-file"
-          accept=".puml,.txt"
-          onChange={handleFileUpload}
+          id="pumlFile"
           className="file-input"
+          onChange={handleFileUpload}
+          accept=".puml,.txt"
         />
-        <label htmlFor="puml-file" className="upload-btn">
-          Upload PUML File
+        <label htmlFor="pumlFile" className="upload-btn">
+          <span className="button-icon">📁</span>
+          Upload PUML file
         </label>
         {pumlText && (
           <button 

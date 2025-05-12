@@ -331,7 +331,7 @@ Please generate the complete code with all necessary imports, dependencies, and 
             onClick={handleGenerateAndDownload}
             disabled={loading}
           >
-            {loading ? 'Generating...' : 'Generate and DownloadCode'}
+            {loading ? 'Generating...' : 'Generate and Download Code'}
           </button>
         )}
         {loading && (
