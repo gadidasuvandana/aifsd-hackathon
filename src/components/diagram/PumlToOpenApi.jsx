@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const PumlToOpenApi = () => {
   const [pumlText, setPumlText] = useState('');
   const [openApiSpec, setOpenApiSpec] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const generateOpenApiSpec = async () => {
     if (!pumlText.trim()) return;
@@ -147,9 +149,14 @@ System --> User: Login Response
         <div className="output-section">
           <h3>Generated OpenAPI Specification</h3>
           <pre className="openapi-output">{openApiSpec}</pre>
-          <button onClick={downloadOpenApiSpec} className="download-btn">
-            Download OpenAPI Spec
-          </button>
+          <div className="button-container">
+            <button onClick={downloadOpenApiSpec} className="download-btn">
+              Download OpenAPI Spec
+            </button>
+            <button onClick={() => navigate('/test-generator', { state: { openApiSpec } })} className="next-btn">
+              Next: Generate Tests
+            </button>
+          </div>
         </div>
       )}
     </div>

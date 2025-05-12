@@ -4,6 +4,7 @@ import DiagramInput from './components/diagram/DiagramInput';
 import DiagramOutput from './components/diagram/DiagramOutput';
 import PageLayout from './components/layout/PageLayout';
 import TDDWorld from './pages/TDDWorld';
+import TestGenerator from './pages/TestGenerator';
 import './styles/App.css';
 
 function DiagramPage() {
@@ -37,6 +38,7 @@ function App() {
       <Routes>
         <Route path="/" element={<DiagramPage />} />
         <Route path="/tdd" element={<TDDWorld />} />
+        <Route path="/test-generator" element={<TestGenerator />} />
       </Routes>
     </Router>
   );

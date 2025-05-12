@@ -9,7 +9,12 @@ export const callOllama = async (prompt) => {
         body: JSON.stringify({
             model: 'gemma3',
             prompt: prompt,
-            stream: false
+            stream: false,
+            options: {
+                temperature: 0.7,
+                top_p: 0.9,
+                max_tokens: 2000
+            }
         })
     });
 
@@ -19,8 +24,7 @@ export const callOllama = async (prompt) => {
     }
 
     const data = await response.json();
-    console.log('Received response:', data);
-
+    
     if (data.error) {
         throw new Error(data.error);
     }
