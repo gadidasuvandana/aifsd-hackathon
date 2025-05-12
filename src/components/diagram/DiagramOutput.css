@@ -1,0 +1,91 @@
+.output-section {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.code-output {
+  width: 100%;
+  min-height: 200px;
+  padding: 1.5rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  font-family: 'Courier New', monospace;
+  background: #1e1e1e;
+  color: #ffffff;
+  border: 2px solid #333333;
+  border-radius: 6px;
+  resize: vertical;
+  margin-bottom: 1.5rem;
+  white-space: pre-wrap;
+  overflow-y: auto;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.diagram-container {
+  width: 100%;
+  min-height: 400px;
+  padding: 1.5rem;
+  background: #ffffff;
+  border: 2px solid #333333;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+}
+
+.mermaid-container {
+  width: 100%;
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mermaid {
+  width: 100%;
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.output-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.download-btn, .next-btn {
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.download-btn:hover, .next-btn:hover {
+  background-color: #1976D2;
+}
+
+.button-icon {
+  margin-right: 0.5rem;
+}
+
+.error-message {
+  color: #d32f2f;
+  padding: 1rem;
+  background-color: #ffebee;
+  border-radius: 4px;
+  margin: 1rem 0;
+} 
