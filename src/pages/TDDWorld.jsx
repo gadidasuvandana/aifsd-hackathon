@@ -4,8 +4,7 @@ import PumlToOpenApi from '../components/diagram/PumlToOpenApi';
 
 function TDDWorld() {
   return (
-    <PageLayout title="Welcome to TDD World!">
-      <p>This is where your Test-Driven Development journey begins.</p>
+    <PageLayout title="Generate OpenAPI from PlantUML">
       <PumlToOpenApi />
     </PageLayout>
   );

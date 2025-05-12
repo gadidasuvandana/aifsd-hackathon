@@ -46,7 +46,7 @@ function DiagramPage() {
   } = useDiagramGenerator();
 
   return (
-    <PageLayout title="Business to Dev Assistant">
+    <PageLayout title="Generate Sequence Diagram from Requirements">
       <DiagramInput
         text={text}
         setText={setText}
@@ -65,7 +65,7 @@ function App() {
       <div className="app-container">
         <nav className="main-nav">
           <div className="nav-brand">
-            <h1>Business to Dev Assistant</h1>
+            <h1>ThoughtFlowAI</h1>
           </div>
           <div className="nav-links">
             <NavItem to="/">
