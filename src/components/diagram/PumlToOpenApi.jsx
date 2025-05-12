@@ -115,13 +115,113 @@ ${pumlText}`;
   };
 
   return (
-    <div className="puml-to-openapi-container">
-      <div className="input-section">
-        <h2>Convert PlantUML to OpenAPI Specification</h2>
-        <p className="description">
-          Paste your PlantUML sequence diagram below to generate a complete OpenAPI 3.0 specification.
-          The generated specification will include paths, schemas, examples, and proper documentation.
-        </p>
+    <div className="tdd-container">
+      <style jsx>{`
+        .tdd-container {
+          display: flex;
+          gap: 1rem;
+          padding: 1rem;
+          width: 100%;
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+
+        .tdd-input-section, .tdd-output-section {
+          flex: 1;
+          width: 100%;
+          max-width: 550px;
+        }
+
+        .tdd-input-field, .tdd-output-field {
+          width: 100%;
+          min-height: 600px;
+          padding: 1.5rem;
+          font-size: 1rem;
+          line-height: 1.6;
+          font-family: 'Courier New', monospace;
+          background: #1e1e1e;
+          color: #ffffff;
+          border: 2px solid #333333;
+          border-radius: 6px;
+          resize: vertical;
+          margin-bottom: 2rem;
+          white-space: pre-wrap;
+          overflow-y: auto;
+          overflow-x: auto;
+          word-wrap: break-word;
+          word-break: break-all;
+        }
+
+        .button-group {
+          display: flex;
+          gap: 1rem;
+          margin-top: 1rem;
+        }
+
+        .generate-btn {
+          background-color: #4CAF50;
+          color: white;
+          border: none;
+          padding: 12px 24px;
+          border-radius: 4px;
+          cursor: pointer;
+          font-size: 16px;
+          transition: background-color 0.3s;
+        }
+
+        .generate-btn:hover {
+          background-color: #45a049;
+        }
+
+        .generate-btn:disabled {
+          background-color: #cccccc;
+          cursor: not-allowed;
+        }
+
+        .error-message {
+          color: #e74c3c;
+          margin: 1rem 0;
+          padding: 1rem;
+          background: #ffebee;
+          border-radius: 4px;
+        }
+
+        .output-buttons {
+          display: flex;
+          gap: 1rem;
+          margin-top: 1rem;
+          justify-content: flex-end;
+        }
+
+        .download-btn, .next-btn {
+          background-color: #2196F3;
+          color: white;
+          border: none;
+          padding: 12px 24px;
+          border-radius: 4px;
+          cursor: pointer;
+          font-size: 16px;
+          transition: background-color 0.3s;
+        }
+
+        .download-btn:hover, .next-btn:hover {
+          background-color: #1976D2;
+        }
+
+        h2 {
+          margin-bottom: 1rem;
+          color: #ffffff;
+        }
+
+        @media (max-width: 768px) {
+          .tdd-container {
+            flex-direction: column;
+          }
+        }
+      `}</style>
+
+      <div className="tdd-input-section">
+        <h2>PlantUML Diagram</h2>
         <textarea
           value={pumlText}
           onChange={(e) => setPumlText(e.target.value)}
@@ -129,36 +229,41 @@ ${pumlText}`;
 @startuml
 actor User
 participant System
-User -> System: Login Request
-System --> User: Login Response
+User -> System: Login
+System -> System: Validate credentials
+System --> User: Success/Error
 @enduml"
-          rows={10}
-          className="text-input"
+          className="tdd-input-field"
         />
-        <button 
-          onClick={generateOpenApiSpec} 
-          disabled={loading || !pumlText.trim()}
-          className="generate-btn"
-        >
-          {loading ? 'Generating OpenAPI Spec...' : 'Generate OpenAPI Spec'}
-        </button>
-        {error && <div className="error-message">{error}</div>}
+        <div className="button-group">
+          <button 
+            onClick={generateOpenApiSpec} 
+            disabled={loading || !pumlText.trim()}
+            className="generate-btn"
+          >
+            {loading ? 'Generating...' : 'Generate OpenAPI Spec'}
+          </button>
+        </div>
       </div>
-
-      {openApiSpec && (
-        <div className="output-section">
-          <h3>Generated OpenAPI Specification</h3>
-          <pre className="openapi-output">{openApiSpec}</pre>
-          <div className="button-container">
+      <div className="tdd-output-section">
+        <h2>Generated OpenAPI Specification</h2>
+        <pre className="tdd-output-field">
+          {openApiSpec}
+        </pre>
+        {error && <div className="error-message">{error}</div>}
+        {openApiSpec && (
+          <div className="output-buttons">
             <button onClick={downloadOpenApiSpec} className="download-btn">
+              <span className="button-icon">💾</span>
               Download OpenAPI Spec
             </button>
             <button onClick={() => navigate('/test-generator', { state: { openApiSpec } })} className="next-btn">
+              <span className="button-icon">➡️</span>
               Next: Generate Tests
             </button>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

@@ -159,29 +159,27 @@ Please generate the complete code with all necessary imports, dependencies, and 
 
   return (
     <PageLayout title="Code Generator">
-      <style jsx>{`
+      <div className="code-generator-container">
+        <style jsx>{`
         .loading-overlay {
-          position: fixed;
+          position: absolute;
           top: 0;
           left: 0;
           right: 0;
           bottom: 0;
-          background: rgba(255, 255, 255, 0.8);
+          background: rgba(0, 0, 0, 0.8);
           display: flex;
           flex-direction: column;
-          justify-content: center;
           align-items: center;
-          gap: 20px;
+          justify-content: center;
           z-index: 1000;
+          color: white;
+          backdrop-filter: blur(5px);
         }
 
-        .loading-spinner {
-          width: 50px;
-          height: 50px;
-          border: 5px solid #f3f3f3;
-          border-top: 5px solid #3498db;
-          border-radius: 50%;
-          animation: spin 1s linear infinite;
+        .loading-icon {
+          font-size: 3rem;
+          margin-bottom: 1rem;
         }
 
         @keyframes spin {
@@ -190,98 +188,164 @@ Please generate the complete code with all necessary imports, dependencies, and 
         }
 
         .loading-message {
-          font-size: 1.2em;
-          color: #333;
-        }
-
-        {{ ... existing styles ... }}
-        .generate-btn {
-          display: block;
-          margin: 20px auto;
-          padding: 15px 30px;
-          background: #4CAF50;
-          color: white;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-          font-size: 1.1em;
+          font-size: 1.5rem;
+          font-weight: 500;
           text-align: center;
-          transition: background-color 0.3s ease;
-        }
-
-        .generate-btn:hover {
-          background: #45a049;
-        }
-
-        .generate-btn:disabled {
-          background: #cccccc;
-          cursor: not-allowed;
-        }
-
-        .success-message {
-          background-color: #d4edda;
-          color: #155724;
-          padding: 15px;
-          border-radius: 4px;
-          margin-bottom: 20px;
-          text-align: center;
-          animation: fadeInOut 3s ease-in-out;
-        }
-
-        @keyframes fadeInOut {
-          0% { opacity: 0; transform: translateY(-10px); }
-          20% { opacity: 1; transform: translateY(0); }
-          80% { opacity: 1; transform: translateY(0); }
-          100% { opacity: 0; transform: translateY(-10px); }
-        }
-
-        .error-message {
-          background-color: #ffebee;
-          color: #c62828;
-          padding: 15px;
-          border-radius: 4px;
-          margin-bottom: 20px;
-          text-align: center;
+          margin-top: 1rem;
+          padding: 1rem;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 8px;
+          backdrop-filter: blur(3px);
         }
 
         .code-container {
-          max-width: 800px;
-          margin: 0 auto;
-          padding: 20px;
+          width: 100%;
+          margin-bottom: 2rem;
         }
 
-        .code-display {
-          background: #f5f5f5;
-          padding: 20px;
-          border-radius: 8px;
-          overflow-x: auto;
-          font-family: 'Courier New', monospace;
+        .code-textarea {
+          width: 100%;
+          max-width: 1200px;
+          min-height: 800px;
+          padding: 2rem;
+          font-size: 1rem;
+          line-height: 1.6;
+          font-family: 'Fira Code', 'Courier New', monospace;
+          background: #000000;
+          color: #ffffff;
+          border: 2px solid #000000;
+          border-radius: 6px;
+          resize: vertical;
           white-space: pre-wrap;
-        }
-      `}</style>
+          overflow-y: auto;
+          word-wrap: break-word;
+          word-break: break-all;
+          scrollbar-width: thin;
+          scrollbar-color: #666666 #000000;
+          
+          &::-webkit-scrollbar {
+            width: 8px;
+          }
+          
+          &::-webkit-scrollbar-track {
+            background: #000000;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            word-wrap: break-word;
+            word-break: break-all;
+            scrollbar-width: thin;
+            scrollbar-color: #666666 #000000;
+            
+            &::-webkit-scrollbar {
+              width: 8px;
+            }
+            
+            &::-webkit-scrollbar-track {
+              background: #000000;
+            }
+            
+            &::-webkit-scrollbar-thumb {
+              background: #666666;
+              border-radius: 4px;
+            }
+            
+            &::-webkit-scrollbar-thumb:hover {
+              background: #888888;
+            }
+          }
 
-      {error && <div className="error-message">{error}</div>}
-      {successMessage && <div className="success-message">{successMessage}</div>}
+          .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            align-items: center;
+            width: 100%;
+            padding: 0 1rem;
+            margin-top: auto;
+          }
 
-      <div className="code-container">
-        <button
-          className="generate-btn"
-          onClick={handleGenerateAndDownload}
-          disabled={loading}
-        >
-          {loading ? 'Generating...' : 'Generate and Download Code'}
-        </button>
+          .generate-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+          }
 
+          .generate-btn:hover {
+            background-color: #45a049;
+          }
+
+          .generate-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+          }
+
+          .error-message {
+            color: #e74c3c;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #ffebee;
+            border-radius: 4px;
+          }
+
+          .success-message {
+            color: #4CAF50;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #e8f5e9;
+            border-radius: 4px;
+          }
+        `}</style>
+
+        {error && <div className="error-message">{error}</div>}
+        {successMessage && <div className="success-message">{successMessage}</div>}
+
+        {generatedCode ? (
+          <div className="code-output-section">
+            <h3>Generated Code</h3>
+            <div className="code-container">
+              <textarea
+                className="code-textarea"
+                value={generatedCode}
+                readOnly
+              />
+            </div>
+            <div className="button-group">
+              <button 
+                className="generate-btn"
+                onClick={() => {
+                  const blob = new Blob([generatedCode], { type: 'text/plain' });
+                  const url = window.URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `generated_code_${selectedLanguage}.txt`;
+                  document.body.appendChild(a);
+                  a.click();
+                  window.URL.revokeObjectURL(url);
+                  document.body.removeChild(a);
+                }}
+                >
+                  Download Code
+                </button>
+            </div>
+          </div>
+        ) : (
+          <button
+            className="generate-btn"
+            onClick={handleGenerateAndDownload}
+            disabled={loading}
+          >
+            {loading ? 'Generating...' : 'Generate Code'}
+          </button>
+        )}
         {loading && (
           <div className="loading-overlay">
-            <div className="loading-spinner"></div>
-            <div className="loading-message">Generating and downloading code...</div>
-          </div>
-        )}
-
-        {generatedCode && (
-          <div className="code-display">
-            {generatedCode}
+            <div className="loading-icon">⏳</div>
+            <div className="loading-message">Generating your code...</div>
           </div>
         )}
       </div>

@@ -74,12 +74,12 @@ ${openApiSpec}`;
 
           .button-group {
             display: flex;
-            gap: 12px;
-            margin-top: 24px;
-            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            justify-content: flex-end;
             align-items: center;
-            padding: 0 16px;
             width: 100%;
+            padding: 0 1rem;
           }
 
           .download-btn, .next-btn {
@@ -99,6 +99,91 @@ ${openApiSpec}`;
             align-items: center;
             justify-content: center;
             box-sizing: border-box;
+            min-width: 150px;
+          }
+
+          .test-input-section {
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            position: relative;
+          }
+
+          .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            color: white;
+            backdrop-filter: blur(5px);
+          }
+
+          .loading-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+          }
+
+          .loading-message {
+            font-size: 1.5rem;
+            font-weight: 500;
+            text-align: center;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            backdrop-filter: blur(3px);
+          }
+
+          .test-cases-container {
+            width: 100%;
+          }
+
+          .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            align-items: center;
+            width: 100%;
+            padding: 0 1rem;
+            margin-top: auto;
+          }
+
+          .test-cases-textarea {
+            width: 100%;
+            min-height: 400px;
+            padding: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.6;
+            font-family: 'Courier New', monospace;
+            background: #1e1e1e;
+            color: #ffffff;
+            border: 2px solid #333333;
+            border-radius: 6px;
+            resize: vertical;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            word-wrap: break-word;
+            word-break: break-all;
+          }
+
+          h3 {
+            color: #ffffff;
+            margin-bottom: 1rem;
           }
 
           .download-btn {
@@ -197,52 +282,57 @@ ${openApiSpec}`;
         </div>
 
         {loading && (
-          <div className="loading-message">
-            Generating test cases...
+          <div className="loading-overlay">
+            <div className="loading-icon">⏳</div>
+            <div className="loading-message">Generating test cases...</div>
           </div>
         )}
 
         {selectedLanguage && !loading && (
-          <div className="test-output-section">
+          <div className="test-input-section">
             <h3>{selectedLanguage.charAt(0).toUpperCase() + selectedLanguage.slice(1)} Test Cases</h3>
-            <div className="test-content">
-              <pre className="test-cases">{testCases}</pre>
-              {testCases && (
-                <div className="button-group">
-                  <button 
-                    className="download-btn"
-                    onClick={() => {
-                      const blob = new Blob([testCases], { type: 'text/plain' });
-                      const url = window.URL.createObjectURL(blob);
-                      const a = document.createElement('a');
-                      a.href = url;
-                      a.download = `api_tests_${selectedLanguage}.txt`;
-                      document.body.appendChild(a);
-                      a.click();
-                      window.URL.revokeObjectURL(url);
-                      document.body.removeChild(a);
-                    }}
-                  >
-                    Download Test Cases
-                  </button>
-                  <button 
-                    className="next-btn"
-                    onClick={() => {
-                      navigate('/database-selector', {
-                        state: {
-                          openApiSpec: openApiSpec,
-                          testCases: testCases,
-                          selectedLanguage: selectedLanguage
-                        }
-                      });
-                    }}
-                    disabled={loading}
-                  >
-                    Next
-                  </button>
-                </div>
-              )}
+            <div className="test-cases-container">
+              <textarea
+                className="test-cases-textarea"
+                value={testCases}
+                readOnly
+              />
             </div>
+            {testCases && (
+              <div className="button-group">
+                <button 
+                  className="download-btn"
+                  onClick={() => {
+                    const blob = new Blob([testCases], { type: 'text/plain' });
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `api_tests_${selectedLanguage}.txt`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                  }}
+                >
+                  Download Test Cases
+                </button>
+                <button 
+                  className="next-btn"
+                  onClick={() => {
+                    navigate('/database-selector', {
+                      state: {
+                        openApiSpec: openApiSpec,
+                        testCases: testCases,
+                        selectedLanguage: selectedLanguage
+                      }
+                    });
+                  }}
+                  disabled={loading}
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
