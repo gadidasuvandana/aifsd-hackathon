@@ -148,8 +148,21 @@ ${pumlText}`;
           white-space: pre-wrap;
           overflow-y: auto;
           overflow-x: auto;
-          word-wrap: break-word;
-          word-break: break-all;
+        }
+
+        .loading-spinner {
+          width: 2rem;
+          height: 2rem;
+          border: 3px solid rgba(255, 255, 255, 0.1);
+          border-top: 3px solid #ffffff;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+          margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
         }
 
         .button-group {
@@ -241,7 +254,12 @@ System --> User: Success/Error
             disabled={loading || !pumlText.trim()}
             className="generate-btn"
           >
-            {loading ? 'Generating...' : 'Generate OpenAPI Spec'}
+            {loading ? (
+              <>
+                <div className="loading-spinner"></div>
+                Generating...
+              </>
+            ) : 'Generate OpenAPI Spec'}
           </button>
         </div>
       </div>
@@ -254,8 +272,14 @@ System --> User: Success/Error
         {openApiSpec && (
           <div className="output-buttons">
             <button onClick={downloadOpenApiSpec} className="download-btn">
-              <span className="button-icon">💾</span>
+              <>
+              {loading ? (
+                <div className="loading-spinner"></div>
+              ) : (
+                <span className="button-icon">💾</span>
+              )}
               Download OpenAPI Spec
+            </>
             </button>
             <button onClick={() => navigate('/test-generator', { state: { openApiSpec } })} className="next-btn">
               <span className="button-icon">➡️</span>

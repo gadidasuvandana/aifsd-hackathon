@@ -59,7 +59,6 @@ ${openApiSpec}`;
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
-            margin-top: 20px;
             transition: background-color 0.3s;
           }
           
@@ -133,9 +132,19 @@ ${openApiSpec}`;
             backdrop-filter: blur(5px);
           }
 
-          .loading-icon {
-            font-size: 3rem;
+          .loading-spinner {
+            width: 2rem;
+            height: 2rem;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid #ffffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
             margin-bottom: 1rem;
+          }
+
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
           }
 
           .loading-message {
@@ -283,7 +292,7 @@ ${openApiSpec}`;
 
         {loading && (
           <div className="loading-overlay">
-            <div className="loading-icon">⏳</div>
+            <div className="loading-spinner"></div>
             <div className="loading-message">Generating test cases...</div>
           </div>
         )}

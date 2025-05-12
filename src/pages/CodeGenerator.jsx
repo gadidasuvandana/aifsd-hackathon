@@ -177,9 +177,19 @@ Please generate the complete code with all necessary imports, dependencies, and 
           backdrop-filter: blur(5px);
         }
 
-        .loading-icon {
-          font-size: 3rem;
+        .loading-spinner {
+          width: 2rem;
+          height: 2rem;
+          border: 3px solid rgba(255, 255, 255, 0.1);
+          border-top: 3px solid #ffffff;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
           margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
         }
 
         @keyframes spin {
@@ -314,24 +324,6 @@ Please generate the complete code with all necessary imports, dependencies, and 
                 readOnly
               />
             </div>
-            <div className="button-group">
-              <button 
-                className="generate-btn"
-                onClick={() => {
-                  const blob = new Blob([generatedCode], { type: 'text/plain' });
-                  const url = window.URL.createObjectURL(blob);
-                  const a = document.createElement('a');
-                  a.href = url;
-                  a.download = `generated_code_${selectedLanguage}.txt`;
-                  document.body.appendChild(a);
-                  a.click();
-                  window.URL.revokeObjectURL(url);
-                  document.body.removeChild(a);
-                }}
-                >
-                  Download Code
-                </button>
-            </div>
           </div>
         ) : (
           <button
@@ -339,12 +331,12 @@ Please generate the complete code with all necessary imports, dependencies, and 
             onClick={handleGenerateAndDownload}
             disabled={loading}
           >
-            {loading ? 'Generating...' : 'Generate Code'}
+            {loading ? 'Generating...' : 'Generate and DownloadCode'}
           </button>
         )}
         {loading && (
           <div className="loading-overlay">
-            <div className="loading-icon">⏳</div>
+            <div className="loading-spinner"></div>
             <div className="loading-message">Generating your code...</div>
           </div>
         )}
