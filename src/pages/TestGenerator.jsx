@@ -71,6 +71,97 @@ ${openApiSpec}`;
             background-color: #cccccc;
             cursor: not-allowed;
           }
+
+          .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            justify-content: center;
+            align-items: center;
+            padding: 0 16px;
+            width: 100%;
+          }
+
+          .download-btn, .next-btn {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            height: 40px;
+            line-height: 1;
+            padding: 0 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            text-align: center;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+          }
+
+          .download-btn {
+            background-color: #2196F3;
+            min-width: 150px;
+          }
+
+          .next-btn {
+            background-color: #4CAF50;
+            min-width: 100px;
+          }
+
+          .download-btn:hover, .next-btn:hover {
+            opacity: 0.9;
+          }
+
+          .download-btn:disabled, .next-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+          }
+
+          .next-btn {
+            background-color: #4CAF50;
+          }
+
+          .download-btn:hover, .next-btn:hover {
+            opacity: 0.9;
+          }
+
+          .download-btn:disabled, .next-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+          }
+
+          .language-btn {
+            background-color: #f0f0f0;
+            color: #333;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+          }
+
+          .language-btn.selected {
+            background-color: #4CAF50;
+            color: white;
+          }
+
+          .language-btn:hover {
+            background-color: #e0e0e0;
+          }
+
+          .language-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+          }
+
+          .language-icon {
+            font-size: 24px;
+            margin-right: 10px;
+          }
         `}</style>
         {error && <div className="error-message">{error}</div>}
         
@@ -105,24 +196,6 @@ ${openApiSpec}`;
           </button>
         </div>
 
-        {showNextButton && (
-          <button 
-            className="next-btn"
-            onClick={() => {
-              navigate('/database-selector', {
-                state: {
-                  openApiSpec: openApiSpec,
-                  testCases: testCases,
-                  selectedLanguage: selectedLanguage
-                }
-              });
-            }}  
-            disabled={loading}
-          >
-            Next
-          </button>
-        )}
-
         {loading && (
           <div className="loading-message">
             Generating test cases...
@@ -134,24 +207,42 @@ ${openApiSpec}`;
             <h3>{selectedLanguage.charAt(0).toUpperCase() + selectedLanguage.slice(1)} Test Cases</h3>
             <div className="test-content">
               <pre className="test-cases">{testCases}</pre>
+              {testCases && (
+                <div className="button-group">
+                  <button 
+                    className="download-btn"
+                    onClick={() => {
+                      const blob = new Blob([testCases], { type: 'text/plain' });
+                      const url = window.URL.createObjectURL(blob);
+                      const a = document.createElement('a');
+                      a.href = url;
+                      a.download = `api_tests_${selectedLanguage}.txt`;
+                      document.body.appendChild(a);
+                      a.click();
+                      window.URL.revokeObjectURL(url);
+                      document.body.removeChild(a);
+                    }}
+                  >
+                    Download Test Cases
+                  </button>
+                  <button 
+                    className="next-btn"
+                    onClick={() => {
+                      navigate('/database-selector', {
+                        state: {
+                          openApiSpec: openApiSpec,
+                          testCases: testCases,
+                          selectedLanguage: selectedLanguage
+                        }
+                      });
+                    }}
+                    disabled={loading}
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
             </div>
-            {showNextButton && (
-              <button 
-                className="next-btn"
-                onClick={() => {
-                  navigate('/database-selector', {
-                    state: {
-                      openApiSpec: openApiSpec,
-                      testCases: testCases,
-                      selectedLanguage: selectedLanguage
-                    }
-                  });
-                }}  
-                disabled={loading}
-              >
-                Next
-              </button>
-            )}
           </div>
         )}
       </div>
