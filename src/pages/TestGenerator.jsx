@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PageLayout from '../components/layout/PageLayout';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { callOllama } from '../services/OllamaService';
 
 function TestGenerator() {
@@ -8,7 +8,10 @@ function TestGenerator() {
   const [loading, setLoading] = useState(false);
   const [testCases, setTestCases] = useState('');
   const [error, setError] = useState('');
+  const [showNextButton, setShowNextButton] = useState(false);
+  const [navigateToNextPage, setNavigateToNextPage] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const openApiSpec = location.state?.openApiSpec || '';
 
@@ -36,6 +39,7 @@ ${openApiSpec}`;
 
       const response = await callOllama(prompt);
       setTestCases(response.response);
+      setShowNextButton(true);
     } catch (err) {
       setError(`Error generating test cases: ${err.message}`);
     } finally {
@@ -46,6 +50,28 @@ ${openApiSpec}`;
   return (
     <PageLayout title="Test Case Generator">
       <div className="test-generator-container">
+        <style jsx>{`
+          .next-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+          }
+          
+          .next-btn:hover {
+            background-color: #45a049;
+          }
+          
+          .next-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+          }
+        `}</style>
         {error && <div className="error-message">{error}</div>}
         
         <p className="description">
@@ -79,6 +105,24 @@ ${openApiSpec}`;
           </button>
         </div>
 
+        {showNextButton && (
+          <button 
+            className="next-btn"
+            onClick={() => {
+              navigate('/database-selector', {
+                state: {
+                  openApiSpec: openApiSpec,
+                  testCases: testCases,
+                  selectedLanguage: selectedLanguage
+                }
+              });
+            }}  
+            disabled={loading}
+          >
+            Next
+          </button>
+        )}
+
         {loading && (
           <div className="loading-message">
             Generating test cases...
@@ -91,6 +135,23 @@ ${openApiSpec}`;
             <div className="test-content">
               <pre className="test-cases">{testCases}</pre>
             </div>
+            {showNextButton && (
+              <button 
+                className="next-btn"
+                onClick={() => {
+                  navigate('/database-selector', {
+                    state: {
+                      openApiSpec: openApiSpec,
+                      testCases: testCases,
+                      selectedLanguage: selectedLanguage
+                    }
+                  });
+                }}  
+                disabled={loading}
+              >
+                Next
+              </button>
+            )}
           </div>
         )}
       </div>

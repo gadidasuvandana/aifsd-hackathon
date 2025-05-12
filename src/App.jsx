@@ -5,6 +5,8 @@ import DiagramOutput from './components/diagram/DiagramOutput';
 import PageLayout from './components/layout/PageLayout';
 import TDDWorld from './pages/TDDWorld';
 import TestGenerator from './pages/TestGenerator';
+import DatabaseSelector from './pages/DatabaseSelector';
+import CodeGenerator from './pages/CodeGenerator';
 import './styles/App.css';
 
 function DiagramPage() {
@@ -39,6 +41,8 @@ function App() {
         <Route path="/" element={<DiagramPage />} />
         <Route path="/tdd" element={<TDDWorld />} />
         <Route path="/test-generator" element={<TestGenerator />} />
+        <Route path="/database-selector" element={<DatabaseSelector />} />
+        <Route path="/code-generator" element={<CodeGenerator />} />
       </Routes>
     </Router>
   );
