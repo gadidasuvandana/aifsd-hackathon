@@ -128,6 +128,10 @@ ${pumlText}`;
     document.body.removeChild(a);
   };
 
+
+  
+
+
   return (
     <div className="tdd-container">
       <style jsx>{`
@@ -220,7 +224,8 @@ ${pumlText}`;
           display: flex;
           gap: 1rem;
           margin-top: 1rem;
-          justify-content: flex-end;
+          justify-content: space-between;
+          flex-wrap: wrap;
         }
 
         .download-btn, .next-btn {
@@ -232,6 +237,10 @@ ${pumlText}`;
           cursor: pointer;
           font-size: 16px;
           transition: background-color 0.3s;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          white-space: nowrap;
         }
 
         .download-btn:hover, .next-btn:hover {
@@ -240,7 +249,7 @@ ${pumlText}`;
 
         h2 {
           margin-bottom: 1rem;
-          color: #333;
+          color: #ffffff;
         }
       `}</style>
 
@@ -292,9 +301,12 @@ ${pumlText}`;
               <span className="button-icon">💾</span>
               Download OpenAPI Spec
             </button>
-            <button onClick={() => navigate('/test-generator', { state: { openApiSpec } })} className="next-btn">
+            <button 
+              onClick={() => navigate('/test-generator', { state: { openApiSpec } })} 
+              className="next-btn"
+            >
               <span className="button-icon">➡️</span>
-              Next: Generate Tests
+              Generate Tests
             </button>
           </div>
         )}

@@ -3,7 +3,7 @@ import { useDiagramGenerator } from './hooks/useDiagramGenerator';
 import DiagramInput from './components/diagram/DiagramInput';
 import DiagramOutput from './components/diagram/DiagramOutput';
 import PageLayout from './components/layout/PageLayout';
-import TDDWorld from './pages/TDDWorld';
+import OpenApiSpecGenerator from './pages/OpenApiSpecGenerator';
 import TestGenerator from './pages/TestGenerator';
 import DatabaseSelector from './pages/DatabaseSelector';
 import CodeGenerator from './pages/CodeGenerator';
@@ -72,9 +72,9 @@ function App() {
               <span className="nav-icon">📊</span>
               Diagram Generator
             </NavItem>
-            <NavItem to="/tdd">
+            <NavItem to="/openapi-spec-generator">
               <span className="nav-icon">🧪</span>
-              TDD World
+ OpenAPI Spec Generator
             </NavItem>
             <NavItem to="/test-generator">
               <span className="nav-icon">🤖</span>
@@ -93,7 +93,7 @@ function App() {
         <main className="main-content">
           <Routes>
             <Route path="/" element={<DiagramPage />} />
-            <Route path="/tdd" element={<TDDWorld />} />
+            <Route path="/openapi-spec-generator" element={<OpenApiSpecGenerator />} />
             <Route path="/test-generator" element={<TestGenerator />} />
             <Route path="/database-selector" element={<DatabaseSelector />} />
             <Route path="/code-generator" element={<CodeGenerator />} />

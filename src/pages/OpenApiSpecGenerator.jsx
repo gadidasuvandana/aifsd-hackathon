@@ -2,7 +2,7 @@ import React from 'react';
 import PageLayout from '../components/layout/PageLayout';
 import PumlToOpenApi from '../components/diagram/PumlToOpenApi';
 
-function TDDWorld() {
+function OpenApiSpecGenerator() {
   return (
     <PageLayout title="Generate OpenAPI from PlantUML">
       <PumlToOpenApi />
@@ -10,4 +10,4 @@ function TDDWorld() {
   );
 }
 
-export default TDDWorld; 
+export default OpenApiSpecGenerator;

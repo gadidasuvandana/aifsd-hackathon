@@ -138,7 +138,7 @@ const DiagramOutput = ({ puml, downloadPuml }) => {
           <span className="button-icon">💾</span>
           Download PUML
         </button>
-        <button onClick={() => navigate('/tdd')} className="next-btn">
+        <button onClick={() => navigate('/openapi-spec-generator')} className="next-btn">
           <span className="button-icon">➡️</span>
           Next
         </button>
